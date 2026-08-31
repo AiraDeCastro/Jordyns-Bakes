@@ -67,4 +67,4 @@ Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, r
 ## Discovered During Work
 _(Newly found tasks go here as they turn up, tagged with the milestone they belong to.)_
 
-- [Milestone 0] Initialize a git repository for the project (currently not a git repo) and make an initial commit before further work — `create-next-app` was run with git disabled to avoid conflicting with the existing docs.
+- [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)

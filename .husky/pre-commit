@@ -1,0 +1,9 @@
+echo "Running pre-commit checks: lint -> test -> build -> audit"
+
+npm run lint || { echo "Pre-commit failed: lint errors must be fixed before committing."; exit 1; }
+
+npm run test || { echo "Pre-commit failed: tests must pass before committing."; exit 1; }
+
+npm run build || { echo "Pre-commit failed: build must succeed before committing."; exit 1; }
+
+npm audit --audit-level=high || { echo "Pre-commit failed: fix high/critical vulnerabilities before committing (npm audit)."; exit 1; }
