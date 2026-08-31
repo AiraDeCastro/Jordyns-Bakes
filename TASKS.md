@@ -68,3 +68,4 @@ Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, r
 _(Newly found tasks go here as they turn up, tagged with the milestone they belong to.)_
 
 - [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)
+- [x] [Milestone 0] Set up pre-commit quality gates (lint, test, build, `npm audit`) via Husky, and enforce Conventional Commits via commitlint — see CLAUDE.md "Commit workflow". Vitest + React Testing Library added since no test suite existed yet, with an initial smoke test for the Home page.

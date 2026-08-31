@@ -21,3 +21,10 @@ Keep PRD.md, PLANNING.md, and TASKS.md consistent with each other. If an impleme
 
 - [AGENTS.md](AGENTS.md) is auto-generated/maintained by `next dev` — it warns that this Next.js version has breaking changes vs. older training data. Check `node_modules/next/dist/docs/` for current API behavior before writing Next.js code that relies on memorized conventions. Don't remove its content from diffs; it gets re-added anyway.
 - Stack is live: Next.js (App Router, TypeScript, Turbopack) + Tailwind CSS v4, scaffolded under this directory. Run `npm run dev` to start it locally (or use the `.claude/launch.json` preview config).
+- Testing: Vitest + React Testing Library (`npm run test`, or `npm run test:watch`). Tests are colocated next to what they test (e.g. `src/app/page.test.tsx`). Every new feature needs at least a smoke test — don't leave code untested to skip the pre-commit gate.
+
+## Commit workflow
+
+- **Conventional Commits are required.** Format: `type(scope?): subject` — e.g. `feat(order-form): add reference image upload`, `fix(gallery): correct occasion filter`, `chore: bump dependency`. Common types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`, `ci`, `build`. Enforced by commitlint via a Husky `commit-msg` hook (`commitlint.config.js`) — non-conforming messages are rejected. `npm run commit` launches an interactive Commitizen prompt that builds the message for you.
+- **A Husky pre-commit hook runs automatically on every `git commit`** (`.husky/pre-commit`) and blocks the commit unless, in order: `npm run lint` passes, `npm run test` passes, `npm run build` succeeds, and `npm audit --audit-level=high` finds no high/critical vulnerabilities. Don't bypass this with `--no-verify` — fix the underlying issue instead. The same sequence is available on demand via `npm run precommit-check`.
+- If a change doesn't have tests yet, write them as part of that change — the pre-commit hook can't do its job otherwise.
