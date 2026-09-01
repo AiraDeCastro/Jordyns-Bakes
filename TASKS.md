@@ -1,6 +1,6 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), and 3 (public pages) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), 3 (public pages), and 4 (order form) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
@@ -27,12 +27,12 @@ Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (dat
 - [x] Build the FAQ page (optional for MVP) — built with real, decided answers (lead time, quoting, delivery/pickup, dietary)
 
 ## Milestone 4 — Order form
-- Build the form with the full field set from PLANNING.md
-- Add client- and server-side validation on required fields
-- Add reference image upload (size/type limits) to storage
-- Add a short-notice warning for event dates under the 2-week minimum lead time, and state that lead time up front on the form
-- On submit: write the row to `orders`, email a confirmation to the customer, email a notification to Jordyn
-- Build the submission confirmation screen
+- [x] Build the form with the full field set from PLANNING.md — `src/components/OrderForm.tsx`
+- [x] Add client- and server-side validation on required fields — HTML5 `required` client-side, zod schema (`src/lib/validation/order.ts`) re-validated server-side in the Server Action
+- [x] Add reference image upload (size/type limits) to storage — private `order-references` Supabase Storage bucket (5MB/file, image types only), verified live: customers can upload but not read anything back
+- [x] Add a short-notice warning for event dates under the 2-week minimum lead time, and state that lead time up front on the form
+- [x] On submit: write the row to `orders`, email a confirmation to the customer, email a notification to Jordyn — email sending is best-effort (`Promise.allSettled`) so a failed email never fails the order; verified live that a bad email address logs an error but the order still saves
+- [x] Build the submission confirmation screen
 
 ## Milestone 5 — Availability toggle
 - Render the order form or a "not accepting orders" message based on `settings.accepting_orders`
@@ -70,6 +70,11 @@ _(Newly found tasks go here as they turn up, tagged with the milestone they belo
 - [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)
 - [x] [Milestone 0] Set up pre-commit quality gates (lint, test, build, `npm audit`) via Husky, and enforce Conventional Commits via commitlint — see CLAUDE.md "Commit workflow". Vitest + React Testing Library added since no test suite existed yet, with an initial smoke test for the Home page.
 - [x] [Milestone 3] The root layout (`src/app/layout.tsx`) renders `<Header />{children}<Footer />` directly inside a flex-column `<body>`, with no extra wrapper div. Each page's own top-level element needs a `flex-1` class (as the current placeholder Home page already has) so it fills the space between header and footer — remember this when building the real Home/Gallery/About/FAQ pages. Done: all four pages follow this.
-- [Milestone 4] When writing the order-form submit code, use a plain `.insert()` call with no chained `.select()` (and don't set `Prefer: return=representation`) — see the RLS gotcha noted in PLANNING.md. Confirmed live during Milestone 2 testing: requesting the inserted row back makes the whole submit fail for customers, since they correctly have no read access to the `orders` table.
+- [x] [Milestone 4] When writing the order-form submit code, use a plain `.insert()` call with no chained `.select()` (and don't set `Prefer: return=representation`) — see the RLS gotcha noted in PLANNING.md. Confirmed live during Milestone 2 testing: requesting the inserted row back makes the whole submit fail for customers, since they correctly have no read access to the `orders` table. Done: `src/app/order/actions.ts` follows this.
 - [Milestone 3] Any page that reads live data from Supabase (like the Home page's `accepting_orders` banner) needs `export const dynamic = "force-dynamic"`, or Next.js will statically prerender it at build time and freeze the value until the next deploy. Caught this on Home — double-check the same applies wherever Milestone 5 (availability toggle) reads this setting.
 - [Milestone 7] Placeholder content to swap for the real thing: `src/lib/gallery-items.ts` (illustrated placeholder cards, no real photos yet) and the bio paragraph in `src/app/about/page.tsx` (draft copy, not Jordyn's actual words).
+- [x] [Milestone 4] Found and reconciled a leftover, uncommitted duplicate `OrderForm.tsx` under `src/components/` that predated this session's work and referenced option constants that didn't exist. Consolidated into one working component at `src/components/OrderForm.tsx` (the project's established location for shared components); no other duplicates found.
+- [x] [Milestone 4] Real bug found via live testing: optional dropdown fields (`budgetRange`, `referralSource`) submit `""` for their unselected placeholder option, which `z.enum(...).optional()` rejects as an invalid value (empty string isn't "missing"). Fixed with an `optionalEnum()` helper in `src/lib/validation/order.ts` that treats `""` as not-provided. Covered by a regression test.
+- [x] [Milestone 4] Real bug found via live testing: React resets a form's uncontrolled fields after any Server Action runs, including on a validation error — so a customer who mistyped one field would lose every other field they'd filled in. Fixed by making every text/select field in `OrderForm` fully controlled from one state object. Covered by a regression test. (File uploads can't be controlled by React and will still clear on error — an inherent browser limitation, not something to try to work around.)
+- [Milestone 0 / ongoing] Vercel's environment variables need the new `ADMIN_NOTIFICATION_EMAIL` var added (same value as `.env.local`) — it exists locally but hasn't been added to the Vercel project settings yet, so the live site's order notification email won't send until that's done.
+- [Milestone 7 / launch] Customer confirmation emails currently fail for any real customer address — verified live (Resend's sandbox sender only accepts the account owner's own address until a domain is verified). Not a code bug; needs a verified sending domain before launch.
