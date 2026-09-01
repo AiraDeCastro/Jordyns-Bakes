@@ -1,6 +1,6 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-08-31: Milestones 0 (project setup) and 1 (design system) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), and 2 (database schema) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
@@ -15,10 +15,10 @@ Status as of 2026-08-31: Milestones 0 (project setup) and 1 (design system) comp
 - [x] Build the base layout shell (nav, footer, container widths), mobile-first — `Header`, `Footer`, and `Container` components added, wired into the root layout; verified responsive in the browser at mobile and desktop widths
 
 ## Milestone 2 — Database schema
-- Create the `orders` table
-- Create the `settings` table with an `accepting_orders` boolean
-- Set up `admin_users` via Supabase Auth (single user)
-- Add row-level security: writes restricted as intended, customer PII readable by admin only
+- [x] Create the `orders` table — see `supabase/schema.sql`
+- [x] Create the `settings` table with an `accepting_orders` boolean — seeded with one row, `accepting_orders = true`
+- [x] Set up `admin_users` via Supabase Auth (single user) — one user created in Supabase Authentication (email can be swapped to Jordyn's later with zero data impact, since nothing references the specific user)
+- [x] Add row-level security: writes restricted as intended, customer PII readable by admin only — verified live: customers can submit orders but can't read any orders back (including their own just-submitted one); the accepting-orders switch is publicly readable but only admin-editable
 
 ## Milestone 3 — Public pages
 - Build the Home page: hero, intro, accepting/not-accepting status banner, CTAs
@@ -70,3 +70,4 @@ _(Newly found tasks go here as they turn up, tagged with the milestone they belo
 - [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)
 - [x] [Milestone 0] Set up pre-commit quality gates (lint, test, build, `npm audit`) via Husky, and enforce Conventional Commits via commitlint — see CLAUDE.md "Commit workflow". Vitest + React Testing Library added since no test suite existed yet, with an initial smoke test for the Home page.
 - [Milestone 3] The root layout (`src/app/layout.tsx`) renders `<Header />{children}<Footer />` directly inside a flex-column `<body>`, with no extra wrapper div. Each page's own top-level element needs a `flex-1` class (as the current placeholder Home page already has) so it fills the space between header and footer — remember this when building the real Home/Gallery/About/FAQ pages.
+- [Milestone 4] When writing the order-form submit code, use a plain `.insert()` call with no chained `.select()` (and don't set `Prefer: return=representation`) — see the RLS gotcha noted in PLANNING.md. Confirmed live during Milestone 2 testing: requesting the inserted row back makes the whole submit fail for customers, since they correctly have no read access to the `orders` table.
