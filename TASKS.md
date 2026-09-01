@@ -1,13 +1,13 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-08-31: Milestones 0 (project setup) and 1 (design system) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
-- Set up the Supabase project (database + auth)
-- Set up a Resend account and API key for transactional email
-- Connect the repo to Vercel for deploys
-- Set up `.env.local` and Vercel env vars for secrets (Supabase keys, Resend key)
+- [x] Set up the Supabase project (database + auth) — project created, URL/publishable key/secret key saved in `.env.local` (git-ignored; documented in `.env.example`)
+- [x] Set up a Resend account and API key for transactional email — key saved in `.env.local`; sending is limited to your own inbox until a domain is verified with Resend later
+- [x] Connect the repo to Vercel for deploys — imported from GitHub, live at https://jordyns-bakes.vercel.app (auto-deploys on every push to `main`)
+- [x] Set up `.env.local` and Vercel env vars for secrets (Supabase keys, Resend key) — all 4 saved locally in `.env.local` (git-ignored) and in Vercel's Environment Variables settings (public ones kept public/Config, service-role and Resend keys kept as Secret)
 
 ## Milestone 1 — Design system
 - [x] Define Tailwind theme tokens for the blush/cream palette — brand colors added as CSS variables in `globals.css` (background, foreground, heading, muted, surface, accent, accent-deep, accent-tint, border), fixed rather than dark-mode-switching
