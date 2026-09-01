@@ -1,6 +1,6 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), and 2 (database schema) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), and 3 (public pages) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
@@ -21,10 +21,10 @@ Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), and 2 
 - [x] Add row-level security: writes restricted as intended, customer PII readable by admin only — verified live: customers can submit orders but can't read any orders back (including their own just-submitted one); the accepting-orders switch is publicly readable but only admin-editable
 
 ## Milestone 3 — Public pages
-- Build the Home page: hero, intro, accepting/not-accepting status banner, CTAs
-- Build the Gallery page: photo grid, filter by occasion category, lightbox view
-- Build the About page: bio/story, lead-time expectations
-- Build the FAQ page (optional for MVP)
+- [x] Build the Home page: hero, intro, accepting/not-accepting status banner, CTAs — status banner reads the live `settings.accepting_orders` value from Supabase on every request (verified against the real database)
+- [x] Build the Gallery page: photo grid, filter by occasion category, lightbox view — verified filtering and the lightbox interaction live in the browser; uses placeholder illustrated cards until real photos exist (Milestone 7)
+- [x] Build the About page: bio/story, lead-time expectations — bio text is a placeholder draft pending Jordyn's real copy (Milestone 7)
+- [x] Build the FAQ page (optional for MVP) — built with real, decided answers (lead time, quoting, delivery/pickup, dietary)
 
 ## Milestone 4 — Order form
 - Build the form with the full field set from PLANNING.md
@@ -69,5 +69,7 @@ _(Newly found tasks go here as they turn up, tagged with the milestone they belo
 
 - [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)
 - [x] [Milestone 0] Set up pre-commit quality gates (lint, test, build, `npm audit`) via Husky, and enforce Conventional Commits via commitlint — see CLAUDE.md "Commit workflow". Vitest + React Testing Library added since no test suite existed yet, with an initial smoke test for the Home page.
-- [Milestone 3] The root layout (`src/app/layout.tsx`) renders `<Header />{children}<Footer />` directly inside a flex-column `<body>`, with no extra wrapper div. Each page's own top-level element needs a `flex-1` class (as the current placeholder Home page already has) so it fills the space between header and footer — remember this when building the real Home/Gallery/About/FAQ pages.
+- [x] [Milestone 3] The root layout (`src/app/layout.tsx`) renders `<Header />{children}<Footer />` directly inside a flex-column `<body>`, with no extra wrapper div. Each page's own top-level element needs a `flex-1` class (as the current placeholder Home page already has) so it fills the space between header and footer — remember this when building the real Home/Gallery/About/FAQ pages. Done: all four pages follow this.
 - [Milestone 4] When writing the order-form submit code, use a plain `.insert()` call with no chained `.select()` (and don't set `Prefer: return=representation`) — see the RLS gotcha noted in PLANNING.md. Confirmed live during Milestone 2 testing: requesting the inserted row back makes the whole submit fail for customers, since they correctly have no read access to the `orders` table.
+- [Milestone 3] Any page that reads live data from Supabase (like the Home page's `accepting_orders` banner) needs `export const dynamic = "force-dynamic"`, or Next.js will statically prerender it at build time and freeze the value until the next deploy. Caught this on Home — double-check the same applies wherever Milestone 5 (availability toggle) reads this setting.
+- [Milestone 7] Placeholder content to swap for the real thing: `src/lib/gallery-items.ts` (illustrated placeholder cards, no real photos yet) and the bio paragraph in `src/app/about/page.tsx` (draft copy, not Jordyn's actual words).
