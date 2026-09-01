@@ -2,7 +2,7 @@
 
 **Owner:** Jordyn McIntosh (@jordynsbakes)
 **Status:** Draft v1
-**Last updated:** 2026-08-30
+**Last updated:** 2026-08-31
 
 ## 1. Overview
 
@@ -51,7 +51,7 @@ Note: actual photos should be sourced directly from Jordyn (exported from her ca
 2. **Gallery** — grid of cake/cupcake photos, filterable by occasion category.
 3. **Order Form** — the core conversion flow (see §7).
 4. **About** — short bio, story, how ordering works, lead-time expectations.
-5. **FAQ** (optional MVP, easy to add) — pricing ranges, lead time, delivery vs. pickup, allergy/dietary handling.
+5. **FAQ** (optional MVP, easy to add) — lead time (2 weeks minimum), how quoting works (fully quote-on-request, no listed pricing), delivery vs. pickup, allergy/dietary handling.
 6. **Admin (auth-gated)** — order dashboard for Jordyn only, not linked from public nav.
 
 ## 6. Core Features (MVP)
@@ -83,7 +83,7 @@ See detailed field list in §7. On submit:
 | Field | Type | Notes |
 |---|---|---|
 | Occasion | Select (Wedding / Event / Birthday / Holiday / Graduation / Other) | Drives any conditional fields later (e.g. tiered options for weddings) |
-| Event date needed | Date picker | Should flag/warn if date is very soon (e.g. <2 weeks) since custom cakes need lead time |
+| Event date needed | Date picker | Minimum lead time is 2 weeks; form flags/warns if the selected date is under that |
 | Cake or cupcakes | Select | |
 | Servings / size | Number or select (e.g. "12–15", "20–25", "50+") | |
 | Flavor(s) | Text or multi-select with common flavors + "other" | |
@@ -154,10 +154,11 @@ This stack keeps ongoing cost near-zero at low order volume and requires no serv
 - Logo/wordmark (or confirm using styled text of "Jordyn's Bakes").
 - 15–30 high-quality cake/cupcake photos, tagged by occasion.
 - Short bio/about text.
-- Lead-time policy and any standard pricing ranges to display (even approximate) to set expectations before a quote.
 
-## 14. Open Questions
+## 14. Resolved Decisions
 
-- What's the typical minimum lead time Jordyn needs, so the form/UI can set expectations (e.g. "orders need at least X weeks notice")?
-- Should there be any pricing guidance shown up front, or fully quote-on-request?
-- Confirm single-admin (just Jordyn) is correct for the MVP, or if a second person ever needs dashboard access.
+Previously open questions, resolved 2026-08-31:
+
+- **Minimum lead time:** 2 weeks. Display this on the order form and About/FAQ pages; the form flags/warns on event dates selected under 2 weeks out (§7).
+- **Pricing:** fully quote-on-request. No pricing ranges or guidance are shown anywhere on the site — every request gets an individual quote from Jordyn after review.
+- **Admin access:** single-admin (Jordyn only) is confirmed, not just an MVP placeholder. No multi-admin/staff-role work is planned.

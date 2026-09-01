@@ -30,7 +30,7 @@ Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, r
 - Build the form with the full field set from PLANNING.md
 - Add client- and server-side validation on required fields
 - Add reference image upload (size/type limits) to storage
-- Add a short-notice warning for event dates under ~2 weeks out
+- Add a short-notice warning for event dates under the 2-week minimum lead time, and state that lead time up front on the form
 - On submit: write the row to `orders`, email a confirmation to the customer, email a notification to Jordyn
 - Build the submission confirmation screen
 
@@ -49,7 +49,7 @@ Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, r
 - Get a logo/wordmark decision from Jordyn
 - Collect 15–30 curated cake/cupcake photos, tagged by occasion
 - Get bio/about copy from Jordyn
-- Resolve the open questions in PLANNING.md (lead time, pricing display, single-admin confirmation)
+- [x] Resolve the open questions in PLANNING.md — lead time is 2 weeks, pricing stays fully quote-on-request, admin access is single-admin (confirmed 2026-08-31)
 
 ## Milestone 8 — Polish & QA
 - Do a full mobile viewport pass (primary traffic source)

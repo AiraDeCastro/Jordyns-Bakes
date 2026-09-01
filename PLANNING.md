@@ -47,6 +47,8 @@ Order `status` progresses: `New → Reviewing → Quoted → Confirmed → Compl
 
 **Non-functional priorities:** mobile-first (most traffic arrives from an Instagram bio link on a phone); optimized/responsive gallery images; accessible (contrast, labeled fields, full keyboard nav); customer contact info and uploaded reference images are admin-only, never exposed via a public route or API response.
 
+**Order policy (confirmed):** minimum lead time is 2 weeks — the order form flags/warns on event dates selected under that, and this lead time is stated up front on the order form and About/FAQ pages. Pricing stays fully quote-on-request — no pricing ranges or guidance are shown anywhere on the site. Admin access is single-admin (Jordyn only), confirmed long-term rather than just an MVP placeholder.
+
 **Explicitly out of scope for MVP:** payment/deposit collection, multi-admin roles, calendar/date-blocking logic, live Instagram feed sync, customer-facing status tracking, reviews/testimonials, SMS notifications.
 
 ## Technology stack
@@ -82,8 +84,4 @@ Things to have set up before/while developing:
 
 ## Open questions
 
-Not resolved yet — flag rather than silently assume an answer:
-
-- Minimum lead time Jordyn needs for a custom order (affects the short-notice warning on the order form).
-- Whether to show any pricing guidance up front vs. fully quote-on-request.
-- Whether single-admin access is sufficient long-term.
+None outstanding for MVP scope. The prior three (lead time, pricing display, single-admin access) were resolved 2026-08-31 — see the Order policy note under Architecture, and PRD §14 for the full record.
