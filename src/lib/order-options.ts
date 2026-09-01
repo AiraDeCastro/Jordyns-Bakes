@@ -41,3 +41,13 @@ export const REFERRAL_SOURCES = [
   "Past customer",
   "Other",
 ] as const;
+
+// Mirrors the `orders.status` check constraint in supabase/schema.sql.
+export const ORDER_STATUSES = [
+  "New",
+  "Reviewing",
+  "Quoted",
+  "Confirmed",
+  "Completed",
+  "Declined",
+] as const;
