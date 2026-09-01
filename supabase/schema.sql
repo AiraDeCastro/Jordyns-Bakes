@@ -97,3 +97,32 @@ create policy "Admin can update settings"
 
 grant select on settings to anon, authenticated;
 grant update on settings to authenticated;
+
+-- NOTIFY SIGNUPS ---------------------------------------------------------
+-- Emails collected from the "notify me" capture shown when the site
+-- isn't accepting orders (Milestone 5).
+
+create table notify_signups (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table notify_signups enable row level security;
+
+-- Anyone can sign up. No SELECT policy for anon/authenticated-as-customer
+-- — same privacy pattern as orders, so an email list isn't publicly
+-- readable back.
+create policy "Anyone can sign up to be notified"
+  on notify_signups for insert
+  to anon, authenticated
+  with check (true);
+
+-- Only a logged-in admin can see who signed up.
+create policy "Admin can view notify signups"
+  on notify_signups for select
+  to authenticated
+  using (true);
+
+grant insert on notify_signups to anon, authenticated;
+grant select on notify_signups to authenticated;

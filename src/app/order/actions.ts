@@ -6,6 +6,7 @@ import {
   ALLOWED_IMAGE_TYPES,
   MAX_IMAGE_COUNT,
 } from "@/lib/validation/order";
+import { notifySignupSchema } from "@/lib/validation/notify";
 import { createPublicSupabaseClient } from "@/lib/supabase/server";
 import { sendCustomerConfirmationEmail, sendAdminNotificationEmail } from "@/lib/email";
 
@@ -122,6 +123,43 @@ export async function submitOrder(
     sendCustomerConfirmationEmail(emailDetails),
     sendAdminNotificationEmail(emailDetails),
   ]);
+
+  return { status: "success" };
+}
+
+export type NotifySignupState = {
+  status: "idle" | "success" | "error";
+  message?: string;
+};
+
+const UNIQUE_VIOLATION = "23505";
+
+export async function subscribeToNotify(
+  _prevState: NotifySignupState,
+  formData: FormData,
+): Promise<NotifySignupState> {
+  const parsed = notifySignupSchema.safeParse({ email: formData.get("email") });
+
+  if (!parsed.success) {
+    return { status: "error", message: parsed.error.issues[0]?.message ?? "Invalid email" };
+  }
+
+  const supabase = createPublicSupabaseClient();
+
+  // No .select() chained here either — same RLS/RETURNING gotcha as the
+  // orders insert (see supabase/schema.sql).
+  const { error } = await supabase
+    .from("notify_signups")
+    .insert({ email: parsed.data.email });
+
+  // Someone signing up twice should still see success, not an error.
+  if (error && error.code !== UNIQUE_VIOLATION) {
+    console.error("Notify signup failed:", error);
+    return {
+      status: "error",
+      message: "Something went wrong signing you up. Please try again.",
+    };
+  }
 
   return { status: "success" };
 }

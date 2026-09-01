@@ -1,6 +1,6 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), 3 (public pages), and 4 (order form) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), 3 (public pages), 4 (order form), and 5 (availability toggle) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
@@ -35,8 +35,8 @@ Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (dat
 - [x] Build the submission confirmation screen
 
 ## Milestone 5 — Availability toggle
-- Render the order form or a "not accepting orders" message based on `settings.accepting_orders`
-- Add an optional notify-me email capture to the "not accepting orders" state
+- [x] Render the order form or a "not accepting orders" message based on `settings.accepting_orders` — `src/app/order/page.tsx`, `force-dynamic` so it always reflects the live value; verified both states live, including that the Home page banner updates too
+- [x] Add an optional notify-me email capture to the "not accepting orders" state — new `notify_signups` table (same anon-can-insert/admin-only-read pattern as `orders`); verified live end-to-end including duplicate-signup handling
 
 ## Milestone 6 — Admin dashboard
 - Build the auth-gated `/admin` route (Supabase Auth login)
@@ -78,3 +78,5 @@ _(Newly found tasks go here as they turn up, tagged with the milestone they belo
 - [x] [Milestone 4] Real bug found via live testing: React resets a form's uncontrolled fields after any Server Action runs, including on a validation error — so a customer who mistyped one field would lose every other field they'd filled in. Fixed by making every text/select field in `OrderForm` fully controlled from one state object. Covered by a regression test. (File uploads can't be controlled by React and will still clear on error — an inherent browser limitation, not something to try to work around.)
 - [Milestone 0 / ongoing] Vercel's environment variables need the new `ADMIN_NOTIFICATION_EMAIL` var added (same value as `.env.local`) — it exists locally but hasn't been added to the Vercel project settings yet, so the live site's order notification email won't send until that's done.
 - [Milestone 7 / launch] Customer confirmation emails currently fail for any real customer address — verified live (Resend's sandbox sender only accepts the account owner's own address until a domain is verified). Not a code bug; needs a verified sending domain before launch.
+- [Milestone 6] The admin dashboard should also let Jordyn view `notify_signups` (people who asked to be told when orders reopen), not just `orders` — otherwise those signups are collected but nobody ever sees them.
+- [x] [Milestone 0] `.claude/launch.json` needed `"autoPort": true` added — a live production dev server for a different chat session was already holding port 3000, and without this the local dev server refuses to start when that happens.

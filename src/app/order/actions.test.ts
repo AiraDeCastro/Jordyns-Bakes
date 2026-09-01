@@ -17,7 +17,7 @@ vi.mock("@/lib/email", () => ({
   sendAdminNotificationEmail: sendAdminMock,
 }));
 
-const { submitOrder } = await import("./actions");
+const { submitOrder, subscribeToNotify } = await import("./actions");
 
 function buildFormData(overrides: Record<string, string> = {}) {
   const fd = new FormData();
@@ -96,5 +96,52 @@ describe("submitOrder", () => {
     expect(result.status).toBe("error");
     expect(uploadMock).not.toHaveBeenCalled();
     expect(insertMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("subscribeToNotify", () => {
+  function buildEmailFormData(email: string) {
+    const fd = new FormData();
+    fd.set("email", email);
+    return fd;
+  }
+
+  it("signs up a valid email", async () => {
+    const result = await subscribeToNotify(
+      { status: "idle" },
+      buildEmailFormData("alex@example.com"),
+    );
+
+    expect(result.status).toBe("success");
+    expect(insertMock).toHaveBeenCalledWith({ email: "alex@example.com" });
+  });
+
+  it("rejects an invalid email without inserting", async () => {
+    const result = await subscribeToNotify({ status: "idle" }, buildEmailFormData("nope"));
+
+    expect(result.status).toBe("error");
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it("still succeeds if the email already signed up (unique violation)", async () => {
+    insertMock.mockResolvedValueOnce({ error: { code: "23505" } });
+
+    const result = await subscribeToNotify(
+      { status: "idle" },
+      buildEmailFormData("alex@example.com"),
+    );
+
+    expect(result.status).toBe("success");
+  });
+
+  it("returns an error for any other database failure", async () => {
+    insertMock.mockResolvedValueOnce({ error: { code: "500" } });
+
+    const result = await subscribeToNotify(
+      { status: "idle" },
+      buildEmailFormData("alex@example.com"),
+    );
+
+    expect(result.status).toBe("error");
   });
 });

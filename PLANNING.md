@@ -37,6 +37,11 @@ settings
   -- drives whether the public order form or the "not accepting
   -- orders" message renders
 
+notify_signups
+  id, email (unique), created_at
+  -- emails collected from the "notify me" capture shown on /order
+  -- when accepting_orders is false
+
 admin_users
   managed via Supabase Auth — single user for MVP
 ```
@@ -54,6 +59,8 @@ Schema, RLS policies, and grants are defined in [supabase/schema.sql](supabase/s
 **Order form UX gotcha:** React resets a form's uncontrolled fields after any Server Action runs — including when the action returns a validation error — so an all-uncontrolled form loses everything the customer typed the moment one field is wrong. `OrderForm` keeps every text/select field controlled from one state object specifically to avoid this. (File inputs are the one exception — browsers don't allow controlling them, so a reference-image selection is lost on a validation error; that's a platform limitation, not something to work around.)
 
 **Email delivery:** best-effort via `Promise.allSettled` (`src/lib/email.ts`, sent from `src/app/order/actions.ts`) — a failed email must never fail an otherwise-successful order submission. Verified live. Resend's sandbox sender (no domain verified yet) can only deliver to the account's own address; real customer emails will silently fail (logged server-side) until a domain is verified — see TASKS.md.
+
+**Availability toggle:** `/order` (like `/`) is `force-dynamic` and reads `settings.accepting_orders` on every request, rendering either `OrderForm` or a `NotifyMeForm` that writes to `notify_signups`. Same anon-can-insert/admin-only-select RLS pattern as `orders`; a duplicate signup (unique email constraint) is treated as success, not an error, since from the customer's side they're on the list either way. Verified live in both states.
 
 **Design system:** soft blush pink / cream / warm neutral palette, light and airy, never saturated — implemented as fixed CSS variables in `globals.css` (background, foreground, heading, muted, surface, accent, accent-deep, accent-tint, border); the palette does not switch with system dark mode, since it's the brand identity rather than a light/dark theme choice. Headings/logo use Fraunces (`font-display`); body and form text use Nunito Sans (`font-sans`), both loaded via `next/font/google`, legibility taking priority in the form. Generous white space, large uncropped cake photography, minimal chrome, soft rounded edges. A shared `Header`/`Footer`/`Container` shell lives in `src/components` and is wired into the root layout; each page's own root element needs a `flex-1` class to fill the space between them. Occasion categories used consistently across the gallery filter and order form — Weddings, Events, Birthdays, Holidays, Graduations, Other/Custom — mirroring Jordyn's existing Instagram highlights; don't rename without checking with her. Gallery photos are manually curated/uploaded, never scraped or hotlinked from Instagram.
 
