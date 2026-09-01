@@ -10,9 +10,9 @@ Status as of 2026-08-30: nothing built yet. Tasks are grouped into milestones, r
 - Set up `.env.local` and Vercel env vars for secrets (Supabase keys, Resend key)
 
 ## Milestone 1 — Design system
-- Define Tailwind theme tokens for the blush/cream palette
-- Pick and load the heading (serif/script) and body (sans-serif) typefaces
-- Build the base layout shell (nav, footer, container widths), mobile-first
+- [x] Define Tailwind theme tokens for the blush/cream palette — brand colors added as CSS variables in `globals.css` (background, foreground, heading, muted, surface, accent, accent-deep, accent-tint, border), fixed rather than dark-mode-switching
+- [x] Pick and load the heading (serif/script) and body (sans-serif) typefaces — Fraunces (headings, `font-display`) and Nunito Sans (body, `font-sans`) via `next/font/google`
+- [x] Build the base layout shell (nav, footer, container widths), mobile-first — `Header`, `Footer`, and `Container` components added, wired into the root layout; verified responsive in the browser at mobile and desktop widths
 
 ## Milestone 2 — Database schema
 - Create the `orders` table
@@ -69,3 +69,4 @@ _(Newly found tasks go here as they turn up, tagged with the milestone they belo
 
 - [x] [Milestone 0] Initialize a git repository, make an initial commit, and push to a private GitHub repo — done: https://github.com/AiraDeCastro/Jordyns-Bakes (branch `main`)
 - [x] [Milestone 0] Set up pre-commit quality gates (lint, test, build, `npm audit`) via Husky, and enforce Conventional Commits via commitlint — see CLAUDE.md "Commit workflow". Vitest + React Testing Library added since no test suite existed yet, with an initial smoke test for the Home page.
+- [Milestone 3] The root layout (`src/app/layout.tsx`) renders `<Header />{children}<Footer />` directly inside a flex-column `<body>`, with no extra wrapper div. Each page's own top-level element needs a `flex-1` class (as the current placeholder Home page already has) so it fills the space between header and footer — remember this when building the real Home/Gallery/About/FAQ pages.

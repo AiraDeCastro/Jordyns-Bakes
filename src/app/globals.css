@@ -1,26 +1,35 @@
 @import "tailwindcss";
 
+/* Brand palette is intentionally fixed (no dark-mode flip) — a blush/cream
+   identity is part of the brand direction in PLANNING.md, not a theme to invert. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbf5f1;
+  --foreground: #3a2c28;
+  --heading: #2e211d;
+  --muted: #8c7871;
+  --surface: #ffffff;
+  --accent: #c9748a;
+  --accent-deep: #a85069;
+  --accent-tint: #f3dee2;
+  --border: #ebdcd3;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-heading: var(--heading);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-tint: var(--accent-tint);
+  --color-border: var(--border);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
