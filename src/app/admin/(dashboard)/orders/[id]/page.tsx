@@ -4,6 +4,7 @@ import { Container } from "@/components/Container";
 import { createSessionSupabaseClient } from "@/lib/supabase/server-session";
 import { ORDER_STATUSES } from "@/lib/order-options";
 import { updateOrderStatus } from "../../../actions";
+import { DeleteOrderButton } from "./DeleteOrderButton";
 
 export const dynamic = "force-dynamic";
 
@@ -58,25 +59,42 @@ export default async function AdminOrderDetailPage({
             Submitted {new Date(order.created_at).toLocaleString()}
           </p>
         </div>
-        <form action={updateOrderStatus.bind(null, order.id)} className="flex items-center gap-2">
-          <select
-            name="status"
-            defaultValue={order.status}
-            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-deep focus:outline-none focus:ring-2 focus:ring-accent-deep/30"
+        <div className="flex flex-wrap items-center gap-2">
+          <form
+            action={updateOrderStatus.bind(null, order.id)}
+            className="flex items-center gap-2"
           >
-            {ORDER_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="rounded-full bg-accent-deep px-4 py-2 text-sm font-semibold text-surface hover:bg-accent"
-          >
-            Update status
-          </button>
-        </form>
+            <select
+              name="status"
+              defaultValue={order.status}
+              className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-deep focus:outline-none focus:ring-2 focus:ring-accent-deep/30"
+            >
+              {ORDER_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="rounded-full bg-accent-deep px-4 py-2 text-sm font-semibold text-surface hover:bg-accent"
+            >
+              Update status
+            </button>
+          </form>
+          {order.status !== "Declined" && (
+            <form action={updateOrderStatus.bind(null, order.id)}>
+              <input type="hidden" name="status" value="Declined" />
+              <button
+                type="submit"
+                className="rounded-full border border-border px-4 py-2 text-sm font-medium text-muted hover:border-accent-deep hover:text-accent-deep"
+              >
+                Decline
+              </button>
+            </form>
+          )}
+          <DeleteOrderButton orderId={order.id} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 rounded-2xl border border-border bg-surface p-6 sm:grid-cols-2">

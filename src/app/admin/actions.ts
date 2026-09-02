@@ -35,3 +35,11 @@ export async function updateOrderStatus(orderId: string, formData: FormData) {
   revalidatePath(`/admin/orders/${orderId}`);
   revalidatePath("/admin");
 }
+
+export async function deleteOrder(orderId: string) {
+  const supabase = await createSessionSupabaseClient();
+  await supabase.from("orders").delete().eq("id", orderId);
+
+  revalidatePath("/admin");
+  redirect("/admin");
+}

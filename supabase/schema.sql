@@ -62,10 +62,17 @@ create policy "Admin can update orders"
   using (true)
   with check (true);
 
+-- Only a logged-in admin can delete an order (e.g. clearing out test or
+-- spam entries — Milestone 9 discovery).
+create policy "Admin can delete orders"
+  on orders for delete
+  to authenticated
+  using (true);
+
 -- Explicit table-level grants, in addition to the RLS policies above.
 -- RLS alone isn't enough — Postgres also checks the base grant.
 grant insert on orders to anon, authenticated;
-grant select, update on orders to authenticated;
+grant select, update, delete on orders to authenticated;
 
 -- SETTINGS ---------------------------------------------------------------
 -- Single-row table holding whether the site is accepting orders.

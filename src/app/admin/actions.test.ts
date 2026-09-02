@@ -2,26 +2,30 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const signOutMock = vi.fn();
 const eqMock = vi.fn();
+const deleteEqMock = vi.fn();
 const updateMock = vi.fn(() => ({ eq: eqMock }));
+const deleteMock = vi.fn(() => ({ eq: deleteEqMock }));
 const redirectMock = vi.fn();
 const revalidatePathMock = vi.fn();
 
 vi.mock("@/lib/supabase/server-session", () => ({
   createSessionSupabaseClient: async () => ({
     auth: { signOut: signOutMock },
-    from: () => ({ update: updateMock }),
+    from: () => ({ update: updateMock, delete: deleteMock }),
   }),
 }));
 
 vi.mock("next/navigation", () => ({ redirect: redirectMock }));
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }));
 
-const { signOut, toggleAccepting, updateOrderStatus } = await import("./actions");
+const { signOut, toggleAccepting, updateOrderStatus, deleteOrder } = await import("./actions");
 
 beforeEach(() => {
   signOutMock.mockReset().mockResolvedValue({});
   eqMock.mockReset().mockResolvedValue({ error: null });
+  deleteEqMock.mockReset().mockResolvedValue({ error: null });
   updateMock.mockClear();
+  deleteMock.mockClear();
   redirectMock.mockReset();
   revalidatePathMock.mockReset();
 });
@@ -70,5 +74,16 @@ describe("updateOrderStatus", () => {
     await updateOrderStatus("order-123", fd);
 
     expect(updateMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("deleteOrder", () => {
+  it("deletes the order and redirects to the dashboard", async () => {
+    await deleteOrder("order-123");
+
+    expect(deleteMock).toHaveBeenCalled();
+    expect(deleteEqMock).toHaveBeenCalledWith("id", "order-123");
+    expect(revalidatePathMock).toHaveBeenCalledWith("/admin");
+    expect(redirectMock).toHaveBeenCalledWith("/admin");
   });
 });

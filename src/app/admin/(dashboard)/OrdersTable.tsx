@@ -18,9 +18,15 @@ const STATUS_STYLES: Record<string, string> = {
   Declined: "bg-surface text-muted border border-border",
 };
 
-export function OrdersTable({ orders }: { orders: OrderListItem[] }) {
+export function OrdersTable({
+  orders,
+  emptyMessage = "No order requests yet.",
+}: {
+  orders: OrderListItem[];
+  emptyMessage?: string;
+}) {
   if (orders.length === 0) {
-    return <p className="text-sm text-muted">No order requests yet.</p>;
+    return <p className="text-sm text-muted">{emptyMessage}</p>;
   }
 
   return (

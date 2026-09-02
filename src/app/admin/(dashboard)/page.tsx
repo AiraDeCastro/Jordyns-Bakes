@@ -24,6 +24,10 @@ export default async function AdminDashboardPage() {
 
   const acceptingOrders = settings?.accepting_orders ?? false;
 
+  const CLOSED_STATUSES = new Set(["Completed", "Declined"]);
+  const activeOrders = (orders ?? []).filter((order) => !CLOSED_STATUSES.has(order.status));
+  const previousOrders = (orders ?? []).filter((order) => CLOSED_STATUSES.has(order.status));
+
   return (
     <Container className="flex flex-col gap-10 py-12">
       <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border bg-surface p-6 sm:flex-row sm:items-center">
@@ -48,7 +52,7 @@ export default async function AdminDashboardPage() {
 
       <div className="flex flex-col gap-4">
         <h2 className="font-display text-lg font-semibold text-heading">Order requests</h2>
-        <OrdersTable orders={orders ?? []} />
+        <OrdersTable orders={activeOrders} />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -56,6 +60,14 @@ export default async function AdminDashboardPage() {
           Notify-me signups
         </h2>
         <NotifySignupsList signups={signups ?? []} />
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="font-display text-lg font-semibold text-heading">
+          Previous order requests
+        </h2>
+        <p className="text-sm text-muted">Completed or declined orders.</p>
+        <OrdersTable orders={previousOrders} emptyMessage="No completed or declined orders yet." />
       </div>
     </Container>
   );
