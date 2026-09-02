@@ -59,9 +59,9 @@ Status as of 2026-09-02: Milestones 0 (project setup), 1 (design system), 2 (dat
 - [x] Verify no customer PII or reference images are exposed via public routes/APIs — re-verified live: anon can't SELECT `orders` or `notify_signups`, can't list/read the storage bucket, and an anon UPDATE attempt on `settings` returns success but silently changes nothing (RLS-filtered before the write applies — confirmed via `updated_at` not changing). Confirmed `SUPABASE_SERVICE_ROLE_KEY` is never referenced anywhere in `src/` — only in ad-hoc verification scripts. Added `src/app/robots.ts` disallowing `/admin` as defense-in-depth (it's already auth-gated; this just keeps it out of search indexes too).
 
 ## Milestone 9 — Launch
-- Do the final production deploy to Vercel
-- Point the Instagram bio link to the live site
-- Smoke-test the order form and email delivery end-to-end in production
+- [x] Do the final production deploy to Vercel — confirmed live and current at https://jordyns-bakes.vercel.app
+- Point the Instagram bio link to the live site — needs Jordyn (her Instagram account)
+- [x] Smoke-test the order form and email delivery end-to-end in production — full pipeline verified live: submitted a real order on production, confirmed it landed correctly in the database, saw the success screen, and confirmed both the customer confirmation email and the admin notification email actually arrived (using the account owner's own address for both, since Resend has no verified sending domain yet). Also verified admin login/dashboard/sign-out on the real production URL for the first time (previously only tested on localhost), using a throwaway test account created and deleted via the Supabase Admin API. All test data cleaned up afterward.
 
 ---
 
