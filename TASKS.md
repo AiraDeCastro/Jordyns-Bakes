@@ -47,9 +47,9 @@ Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (dat
 - [x] Also show `notify_signups` in the dashboard (carried over from the Milestone 5 discovery) — `src/app/admin/(dashboard)/NotifySignupsList.tsx`
 
 ## Milestone 7 — Content & assets
-- Get a logo/wordmark decision from Jordyn
-- Collect 15–30 curated cake/cupcake photos, tagged by occasion
-- Get bio/about copy from Jordyn
+- Get a logo/wordmark decision from Jordyn — deferred: keeping the styled-text wordmark (already live) until it's confirmed whether Jordyn wants a custom logo made
+- Collect 15–30 curated cake/cupcake photos, tagged by occasion — not started; decided to pitch the site to Jordyn first using the existing illustrated placeholder gallery (each card is clearly labeled "Sample placeholder — real photos coming soon") rather than substitute other bakers'/photographers' photos from Pinterest as stand-ins, which would misattribute real work as Jordyn's own. Swap in her real photos once she sends them.
+- Draft bio/about copy — done, draft copy live on the About page (`src/app/about/page.tsx`), written from known facts only (no fabricated personal history); still needs Jordyn's edits/approval before treating it as final
 - [x] Resolve the open questions in PLANNING.md — lead time is 2 weeks, pricing stays fully quote-on-request, admin access is single-admin (confirmed 2026-08-31)
 
 ## Milestone 8 — Polish & QA

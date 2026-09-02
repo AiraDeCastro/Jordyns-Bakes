@@ -6,13 +6,21 @@ export default function AboutPage() {
       <Container className="mx-auto flex max-w-2xl flex-col gap-6 text-center">
         <h1 className="font-display text-3xl font-semibold text-heading">About Jordyn</h1>
 
-        {/* Placeholder copy — replace with Jordyn's real bio (Milestone 7: Content & assets). */}
-        <p className="text-muted">
-          Jordyn&apos;s Bakes started as a love of baking for the people closest to me, and
-          grew into a small custom cake and cupcake business. Every order is handmade in
-          small batches, designed around your event and your vision — whether that&apos;s a
-          wedding, a birthday, a holiday gathering, or a graduation to celebrate.
-        </p>
+        {/* Draft bio (Milestone 7) — written for Jordyn to edit or approve, not her own words yet. */}
+        <div className="flex flex-col gap-4 text-left text-muted">
+          <p>
+            Jordyn&apos;s Bakes grew out of a simple love for baking — the kind that started
+            with cakes for family and friends, made with whatever was in the kitchen and a
+            lot of trial and error along the way. That love turned into something bigger: a
+            small, made-to-order cake and cupcake business built one request at a time.
+          </p>
+          <p>
+            Every order is handmade from scratch in small batches, designed around your
+            event and your vision. Whether you&apos;re celebrating a wedding, a birthday, a
+            holiday, or a graduation, the goal is the same: a cake that feels made just for
+            you — because it is.
+          </p>
+        </div>
 
         <div className="rounded-2xl border border-border bg-surface p-6 text-left">
           <h2 className="font-display text-lg font-semibold text-heading">
