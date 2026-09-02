@@ -1,13 +1,20 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { OrderForm } from "./OrderForm";
+import { MAX_IMAGE_COUNT } from "@/lib/validation/order";
 
 vi.mock("@/app/order/actions", () => ({
   submitOrder: vi.fn(async () => ({ status: "idle" })),
 }));
 
 describe("OrderForm", () => {
+  beforeEach(() => {
+    // jsdom doesn't implement object URLs.
+    URL.createObjectURL = vi.fn(() => "blob:mock-url");
+    URL.revokeObjectURL = vi.fn();
+  });
+
   it("renders the core required fields", () => {
     render(<OrderForm />);
 
@@ -84,5 +91,29 @@ describe("OrderForm", () => {
     later.setDate(later.getDate() + 30);
     fireEvent.change(dateInput, { target: { value: later.toISOString().slice(0, 10) } });
     expect(screen.queryByText(/less than 2 weeks away/i)).not.toBeInTheDocument();
+  });
+
+  it("shows a thumbnail preview after selecting reference images", async () => {
+    const user = userEvent.setup();
+    render(<OrderForm />);
+
+    const file = new File(["fake-image-content"], "inspo.jpg", { type: "image/jpeg" });
+    await user.upload(screen.getByLabelText(/reference images/i), file);
+
+    expect(screen.getByAltText("inspo.jpg")).toBeInTheDocument();
+    expect(screen.getByText("inspo.jpg")).toBeInTheDocument();
+  });
+
+  it("warns when more than the allowed number of images is selected", async () => {
+    const user = userEvent.setup();
+    render(<OrderForm />);
+
+    const files = Array.from(
+      { length: MAX_IMAGE_COUNT + 1 },
+      (_, i) => new File(["x"], `photo-${i}.jpg`, { type: "image/jpeg" }),
+    );
+    await user.upload(screen.getByLabelText(/reference images/i), files);
+
+    expect(screen.getByText(/please select at most/i)).toBeInTheDocument();
   });
 });

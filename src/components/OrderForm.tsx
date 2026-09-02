@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, type ReactNode } from "react";
+import { useActionState, useEffect, useState, type ChangeEvent, type ReactNode } from "react";
 import { submitOrder, type SubmitOrderState } from "@/app/order/actions";
 import { isShortNotice, MAX_IMAGE_COUNT, MIN_LEAD_TIME_DAYS } from "@/lib/validation/order";
 import {
@@ -85,10 +85,25 @@ export function OrderForm() {
   // a validation error — so without this, a customer who mistypes one
   // field would lose everything else they'd already filled in.
   const [values, setValues] = useState<FormValues>(emptyValues);
+  const [imagePreviews, setImagePreviews] = useState<{ url: string; name: string }[]>([]);
 
   function update<K extends keyof FormValues>(key: K, value: FormValues[K]) {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
+
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files ?? []);
+    setImagePreviews(files.map((file) => ({ url: URL.createObjectURL(file), name: file.name })));
+  }
+
+  // Object URLs are only good for this tab's session — revoke the
+  // previous set whenever it's replaced, and on unmount, so previewing
+  // large images doesn't quietly leak memory.
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+    };
+  }, [imagePreviews]);
 
   if (state.status === "success") {
     return (
@@ -262,8 +277,32 @@ export function OrderForm() {
             name="referenceImages"
             accept="image/jpeg,image/png,image/webp,image/heic"
             multiple
+            onChange={handleImageChange}
             className="text-sm text-muted"
           />
+          {imagePreviews.length > MAX_IMAGE_COUNT && (
+            <p className="text-xs text-accent-deep">
+              That&apos;s {imagePreviews.length} images — please select at most{" "}
+              {MAX_IMAGE_COUNT}.
+            </p>
+          )}
+          {imagePreviews.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-3">
+              {imagePreviews.map((preview) => (
+                <div key={preview.url} className="flex flex-col items-center gap-1">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={preview.url}
+                    alt={preview.name}
+                    className="h-20 w-20 rounded-lg border border-border object-cover"
+                  />
+                  <span className="max-w-20 truncate text-xs text-muted" title={preview.name}>
+                    {preview.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </Field>
       </fieldset>
 
