@@ -1,6 +1,6 @@
 # Tasks — Jordyn's Bakes
 
-Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (database schema), 3 (public pages), 4 (order form), 5 (availability toggle), and 6 (admin dashboard) complete. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
+Status as of 2026-09-02: Milestones 0 (project setup), 1 (design system), 2 (database schema), 3 (public pages), 4 (order form), 5 (availability toggle), 6 (admin dashboard), and 8 (polish & QA) complete. Milestone 7 (content & assets) is partial — bio drafted, real photos and logo decision still pending from Jordyn. Tasks are grouped into milestones, roughly in build order — see [PLANNING.md](PLANNING.md) for the architecture, stack, and design decisions behind them. Check off tasks as they're completed; add anything newly discovered to "Discovered During Work" below, tagged with the milestone it belongs to.
 
 ## Milestone 0 — Project setup
 - [x] Initialize the Next.js + Tailwind project — scaffolded with Next.js 16 (App Router, TypeScript, Turbopack) + Tailwind v4; `npm run build` and the dev server both verified working
@@ -53,10 +53,10 @@ Status as of 2026-09-01: Milestones 0 (project setup), 1 (design system), 2 (dat
 - [x] Resolve the open questions in PLANNING.md — lead time is 2 weeks, pricing stays fully quote-on-request, admin access is single-admin (confirmed 2026-08-31)
 
 ## Milestone 8 — Polish & QA
-- Do a full mobile viewport pass (primary traffic source)
-- Optimize/responsive-size all gallery images
-- Do an accessibility pass: contrast, form labels, keyboard navigation
-- Verify no customer PII or reference images are exposed via public routes/APIs
+- [x] Do a full mobile viewport pass (primary traffic source) — checked Home, Gallery (+ lightbox), Order form, About, FAQ, and Admin login at 375px; no layout issues found. Admin dashboard/order-detail pages verified via code review (same mobile-first `sm:` breakpoint pattern used everywhere else, plus `overflow-x-auto` on the orders table) rather than live click-through — a browser-pane display issue blocked clicks partway through this session, unrelated to the site itself.
+- [x] Optimize/responsive-size all gallery images — `GalleryItem` now supports an optional `imageSrc`; `GalleryGrid` renders `next/image` (responsive `sizes`, lazy-loaded, auto-optimized) once a real photo exists, falling back to the illustration otherwise. Means Milestone 7's real photos need zero extra code — just add the file and set `imageSrc`.
+- [x] Do an accessibility pass: contrast, form labels, keyboard navigation — computed actual WCAG contrast ratios (not eyeballed) and found two real AA failures: `--muted` text (3.86:1 on the page background) and `--accent-deep` on `--accent-tint` (4.07:1, used in the status banner and every pill/badge). Darkened both tokens to pass with margin (4.5–6.2:1) in `globals.css`. Also strengthened focus-visible styles on every form input (a color-only border change is a weak keyboard focus indicator) and added proper focus management to the Gallery lightbox (moves focus in on open, returns it to the triggering card on close) — covered by a regression test. Form labels were already correctly associated (confirmed via passing `getByLabelText` queries throughout the test suite).
+- [x] Verify no customer PII or reference images are exposed via public routes/APIs — re-verified live: anon can't SELECT `orders` or `notify_signups`, can't list/read the storage bucket, and an anon UPDATE attempt on `settings` returns success but silently changes nothing (RLS-filtered before the write applies — confirmed via `updated_at` not changing). Confirmed `SUPABASE_SERVICE_ROLE_KEY` is never referenced anywhere in `src/` — only in ad-hoc verification scripts. Added `src/app/robots.ts` disallowing `/admin` as defense-in-depth (it's already auth-gated; this just keeps it out of search indexes too).
 
 ## Milestone 9 — Launch
 - Do the final production deploy to Vercel

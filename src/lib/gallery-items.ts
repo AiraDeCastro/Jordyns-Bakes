@@ -4,11 +4,17 @@ export type GalleryItem = {
   id: string;
   occasion: Occasion;
   title: string;
+  // Path under /public (e.g. "/gallery/wedding-1.jpg") once a real photo
+  // exists. GalleryGrid renders next/image (responsive + optimized)
+  // when this is set, and the illustrated placeholder otherwise — so
+  // dropping in real files from Milestone 7 needs no other code change.
+  imageSrc?: string;
 };
 
 // Placeholder work samples — swap for Jordyn's real curated photos in
-// Milestone 7 (Content & assets). Each item renders as an illustrated
-// card rather than a fake photo until then.
+// Milestone 7 (Content & assets) by adding `imageSrc` to each item.
+// Until then, each renders as an illustrated card rather than a fake
+// photo.
 export const GALLERY_ITEMS: GalleryItem[] = [
   { id: "1", occasion: "Weddings", title: "Three-tier wedding cake, blush florals" },
   { id: "2", occasion: "Weddings", title: "Naked wedding cake with fresh berries" },

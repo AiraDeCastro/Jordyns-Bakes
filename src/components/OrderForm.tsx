@@ -53,7 +53,7 @@ const emptyValues: FormValues = {
 };
 
 const inputClasses =
-  "rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-deep focus:outline-none";
+  "rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-accent-deep focus:outline-none focus:ring-2 focus:ring-accent-deep/30";
 const labelClasses = "text-sm font-medium text-heading";
 
 function Field({

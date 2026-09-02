@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { GalleryGrid } from "./GalleryGrid";
+import { GalleryGrid, GalleryMedia } from "./GalleryGrid";
 import { GALLERY_ITEMS } from "@/lib/gallery-items";
 
 vi.mock("next/navigation", () => ({
@@ -35,5 +35,48 @@ describe("GalleryGrid", () => {
 
     await user.click(screen.getByRole("button", { name: /close/i }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("moves focus into the dialog on open and back to the card on close", async () => {
+    const user = userEvent.setup();
+    render(<GalleryGrid />);
+
+    const card = screen.getByRole("button", { name: /three-tier wedding cake/i });
+    await user.click(card);
+
+    expect(screen.getByRole("button", { name: /close/i })).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(card).toHaveFocus();
+  });
+});
+
+describe("GalleryMedia", () => {
+  it("renders the illustrated placeholder when an item has no photo yet", () => {
+    render(
+      <GalleryMedia
+        item={{ id: "x", occasion: "Weddings", title: "Test cake" }}
+        sizes="100vw"
+        illustrationClassName="h-16 w-16"
+      />,
+    );
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
+  it("renders the real photo once an item has an imageSrc", () => {
+    render(
+      <GalleryMedia
+        item={{
+          id: "x",
+          occasion: "Weddings",
+          title: "Test cake",
+          imageSrc: "/gallery/test-cake.jpg",
+        }}
+        sizes="100vw"
+        illustrationClassName="h-16 w-16"
+      />,
+    );
+    expect(screen.getByRole("img", { name: "Test cake" })).toBeInTheDocument();
   });
 });

@@ -6,10 +6,14 @@
   --background: #fbf5f1;
   --foreground: #3a2c28;
   --heading: #2e211d;
-  --muted: #8c7871;
+  /* muted and accent-deep are darkened from their original values to meet
+     WCAG AA (4.5:1) for normal text — see Milestone 8 accessibility pass
+     in TASKS.md. Keep any future tweak of these two checked against
+     background/surface/accent-tint before shipping. */
+  --muted: #7a6a63;
   --surface: #ffffff;
   --accent: #c9748a;
-  --accent-deep: #a85069;
+  --accent-deep: #8f4359;
   --accent-tint: #f3dee2;
   --border: #ebdcd3;
 }
