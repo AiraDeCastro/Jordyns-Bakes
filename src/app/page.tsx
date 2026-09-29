@@ -72,8 +72,11 @@ export default async function Home() {
         </Container>
       </section>
 
-      <section className="border-t border-border bg-surface py-14">
-        <Container className="flex flex-col items-center gap-6">
+      <section
+        className="border-t border-border bg-repeat py-14"
+        style={{ backgroundImage: "url(/images/occasions-pattern.jpg)", backgroundSize: "320px" }}
+      >
+        <Container className="flex flex-col items-center gap-6 rounded-2xl bg-surface/90 px-8 py-8 backdrop-blur-sm sm:px-12">
           <h2 className="font-display text-xl font-semibold text-heading">
             Cakes &amp; cupcakes for every occasion
           </h2>
@@ -109,8 +112,11 @@ export default async function Home() {
         </Container>
       </section>
 
-      <section className="border-t border-border bg-surface py-16">
-        <Container className="flex flex-col items-center gap-10">
+      <section
+        className="border-t border-border bg-repeat py-16"
+        style={{ backgroundImage: "url(/images/how-it-works-pattern.jpg)", backgroundSize: "320px" }}
+      >
+        <Container className="flex flex-col items-center gap-10 rounded-2xl bg-surface/90 px-8 py-10 backdrop-blur-sm sm:px-12">
           <h2 className="font-display text-xl font-semibold text-heading">
             How ordering works
           </h2>
