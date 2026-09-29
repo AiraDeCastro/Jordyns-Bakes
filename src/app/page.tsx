@@ -76,20 +76,22 @@ export default async function Home() {
         className="border-t border-border bg-repeat py-14"
         style={{ backgroundImage: "url(/images/occasions-pattern.jpg)", backgroundSize: "320px" }}
       >
-        <Container className="flex flex-col items-center gap-6 rounded-2xl bg-surface/90 px-8 py-8 backdrop-blur-sm sm:px-12">
-          <h2 className="font-display text-xl font-semibold text-heading">
-            Cakes &amp; cupcakes for every occasion
-          </h2>
-          <div className="flex flex-wrap justify-center gap-3">
-            {OCCASIONS.map((occasion) => (
-              <Link
-                key={occasion}
-                href={`/gallery?occasion=${encodeURIComponent(occasion)}`}
-                className="rounded-full bg-accent-tint px-4 py-2 text-sm font-medium text-accent-deep transition-colors hover:bg-accent hover:text-surface"
-              >
-                {occasion}
-              </Link>
-            ))}
+        <Container className="flex flex-col items-center">
+          <div className="mx-6 flex flex-col items-center gap-6 rounded-2xl bg-surface/90 px-8 py-8 backdrop-blur-sm sm:mx-8 sm:px-12 lg:mx-0">
+            <h2 className="font-display text-xl font-semibold text-heading">
+              Cakes &amp; cupcakes for every occasion
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {OCCASIONS.map((occasion) => (
+                <Link
+                  key={occasion}
+                  href={`/gallery?occasion=${encodeURIComponent(occasion)}`}
+                  className="rounded-full bg-accent-tint px-4 py-2 text-sm font-medium text-accent-deep transition-colors hover:bg-accent hover:text-surface"
+                >
+                  {occasion}
+                </Link>
+              ))}
+            </div>
           </div>
         </Container>
       </section>
@@ -116,26 +118,28 @@ export default async function Home() {
         className="border-t border-border bg-repeat py-16"
         style={{ backgroundImage: "url(/images/how-it-works-pattern.jpg)", backgroundSize: "320px" }}
       >
-        <Container className="flex flex-col items-center gap-10 rounded-2xl bg-surface/90 px-8 py-10 backdrop-blur-sm sm:px-12">
-          <h2 className="font-display text-xl font-semibold text-heading">
-            How ordering works
-          </h2>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            {ORDER_STEPS.map((step, index) => (
-              <div key={step} className="flex flex-col items-center gap-3 text-center">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-deep text-sm font-semibold text-surface">
-                  {index + 1}
-                </span>
-                <p className="max-w-xs text-sm text-muted">{step}</p>
-              </div>
-            ))}
+        <Container className="flex flex-col items-center">
+          <div className="mx-6 flex flex-col items-center gap-10 rounded-2xl bg-surface/90 px-8 py-10 backdrop-blur-sm sm:mx-8 sm:px-12 lg:mx-0">
+            <h2 className="font-display text-xl font-semibold text-heading">
+              How ordering works
+            </h2>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+              {ORDER_STEPS.map((step, index) => (
+                <div key={step} className="flex flex-col items-center gap-3 text-center">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-deep text-sm font-semibold text-surface">
+                    {index + 1}
+                  </span>
+                  <p className="max-w-xs text-sm text-muted">{step}</p>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/order"
+              className="rounded-full bg-accent-deep px-6 py-3 text-sm font-semibold text-surface transition-colors hover:bg-accent"
+            >
+              Request an order
+            </Link>
           </div>
-          <Link
-            href="/order"
-            className="rounded-full bg-accent-deep px-6 py-3 text-sm font-semibold text-surface transition-colors hover:bg-accent"
-          >
-            Request an order
-          </Link>
         </Container>
       </section>
     </div>
