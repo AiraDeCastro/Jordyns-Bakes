@@ -4,6 +4,14 @@ import { StatusBanner } from "@/components/StatusBanner";
 import { OCCASIONS } from "@/lib/occasions";
 import { getAcceptingOrders } from "@/lib/settings";
 
+// Mirrors the "How ordering works" list on the About page — keep these
+// in sync if the policy ever changes (lead time, quoting approach).
+const ORDER_STEPS = [
+  "Submit an order request with your event details — occasion, date, size, and design inspiration.",
+  "Orders need at least 2 weeks' notice, since every cake is made to order.",
+  "Every order is quoted individually — there's no fixed price list, so you'll hear back with a quote after submitting your request.",
+];
+
 // The accepting-orders banner must reflect the live database value, not
 // a value baked in at build time, since Jordyn can flip it at any point.
 export const dynamic = "force-dynamic";
@@ -80,6 +88,48 @@ export default async function Home() {
               </Link>
             ))}
           </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-border py-16">
+        <Container className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
+          <h2 className="font-display text-xl font-semibold text-heading">About Jordyn</h2>
+          <p className="text-muted">
+            Jordyn&apos;s Bakes grew out of a simple love for baking — the kind that started
+            with cakes for family and friends, made with whatever was in the kitchen and a
+            lot of trial and error along the way. Every order today is still handmade from
+            scratch in small batches, designed around your event and your vision.
+          </p>
+          <Link
+            href="/about"
+            className="text-sm font-semibold text-accent-deep hover:text-accent"
+          >
+            Read Jordyn&apos;s story →
+          </Link>
+        </Container>
+      </section>
+
+      <section className="border-t border-border bg-surface py-16">
+        <Container className="flex flex-col items-center gap-10">
+          <h2 className="font-display text-xl font-semibold text-heading">
+            How ordering works
+          </h2>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {ORDER_STEPS.map((step, index) => (
+              <div key={step} className="flex flex-col items-center gap-3 text-center">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-deep text-sm font-semibold text-surface">
+                  {index + 1}
+                </span>
+                <p className="max-w-xs text-sm text-muted">{step}</p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/order"
+            className="rounded-full bg-accent-deep px-6 py-3 text-sm font-semibold text-surface transition-colors hover:bg-accent"
+          >
+            Request an order
+          </Link>
         </Container>
       </section>
     </div>

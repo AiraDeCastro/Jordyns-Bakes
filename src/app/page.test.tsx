@@ -17,10 +17,9 @@ describe("Home page", () => {
     expect(
       screen.getByRole("heading", { name: /life's sweetest moments/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /request an order/i })).toHaveAttribute(
-      "href",
-      "/order",
-    );
+    const orderLinks = screen.getAllByRole("link", { name: /request an order/i });
+    expect(orderLinks.length).toBeGreaterThan(0);
+    orderLinks.forEach((link) => expect(link).toHaveAttribute("href", "/order"));
   });
 
   it("shows the not-accepting message when orders are closed", async () => {
@@ -54,5 +53,29 @@ describe("Home page", () => {
       "/video/hero-mobile.mp4",
       "/video/hero-desktop.mp4",
     ]);
+  });
+
+  it("includes an About teaser linking to the full story", async () => {
+    const { getAcceptingOrders } = await import("@/lib/settings");
+    vi.mocked(getAcceptingOrders).mockResolvedValueOnce(true);
+
+    render(await Home());
+
+    expect(screen.getByRole("heading", { name: "About Jordyn" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /jordyn's story/i })).toHaveAttribute(
+      "href",
+      "/about",
+    );
+  });
+
+  it("shows the ordering process as three numbered steps", async () => {
+    const { getAcceptingOrders } = await import("@/lib/settings");
+    vi.mocked(getAcceptingOrders).mockResolvedValueOnce(true);
+
+    render(await Home());
+
+    expect(screen.getByRole("heading", { name: "How ordering works" })).toBeInTheDocument();
+    expect(screen.getByText(/made to order/i)).toBeInTheDocument();
+    ["1", "2", "3"].forEach((n) => expect(screen.getByText(n)).toBeInTheDocument());
   });
 });
