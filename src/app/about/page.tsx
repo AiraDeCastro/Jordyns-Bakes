@@ -4,7 +4,7 @@ export default function AboutPage() {
   return (
     <div
       className="flex flex-1 flex-col bg-repeat py-16"
-      style={{ backgroundImage: "url(/images/about-pattern.jpg)", backgroundSize: "320px" }}
+      style={{ backgroundImage: "url(/images/about-pattern-tile.jpg)", backgroundSize: "320px" }}
     >
       <Container className="mx-auto flex max-w-2xl flex-col gap-6 rounded-2xl bg-surface/90 p-8 text-center backdrop-blur-sm sm:p-12">
         <h1 className="font-display text-3xl font-semibold text-heading">About Jordyn</h1>
